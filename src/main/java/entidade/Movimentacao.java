@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,7 +34,10 @@ public class Movimentacao {
 	
 	@Column(length = 150, name = "descricao", nullable = true, unique = false)
 	private String descricao;
-	private String tipoTransacao;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "tipo_transacao")
+	private TransacaoTipo tipoTransacao;
 	
 	@ManyToOne
 	@JoinColumn(name= "id_conta")
@@ -70,11 +75,11 @@ public class Movimentacao {
 		this.descricao = descricao;
 	}
 
-	public String getTipoTransacao() {
+	public TransacaoTipo getTipoTransacao() {
 		return tipoTransacao;
 	}
 
-	public void setTipoTransacao(String tipoTransacao) {
+	public void setTipoTransacao(TransacaoTipo tipoTransacao) {
 		this.tipoTransacao = tipoTransacao;
 	}
 
