@@ -46,6 +46,18 @@ public class ContaDAO extends GenericoDAO<Conta> {
 		    return calculo;
 		}
 	 
+	 public double buscarSaldoContaPoupanca(Long idConta, String data){
+			EntityManager em = getEntityManager();
+			Query query = em.createQuery("Select sum(valorOperacao) from Movimentacao where id_conta='"+idConta+"' and dataTransacao LIKE '"+data+"%'");
+			double saldo = 0.;
+			try {
+				saldo =  Double.parseDouble(query.getSingleResult().toString());
+			} catch (Exception e) {}
+			em.close();
+			return saldo;
+		}
+		
+	 
 	 public int operacoesPorDia(String cpf) {
 			EntityManager em = emf.createEntityManager();
 			Query query = em.createQuery("from Movimentacao m where m.cpfCorrentista = :cpf and DATE(m.dataTransacao) = CURRENT_DATE");

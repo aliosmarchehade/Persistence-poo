@@ -12,6 +12,7 @@ import entidade.Cliente;
 import entidade.Conta;
 import entidade.ContaTipo;
 import entidade.Movimentacao;
+import entidade.TransacaoTipo;
 
 public class MovimentacaoTela {
 
@@ -39,27 +40,27 @@ public class MovimentacaoTela {
 //		controle1.inserir(conta);
 		
 		movimentacao.setDataTransacao(new Date());
-		movimentacao.setDescricao("depósito de 10,00 no dia 02/12/24");
-		movimentacao.setTipoTransacao("depósito");
+		movimentacao.setDescricao("saque de 15,00 no dia 08/12/24");
+		movimentacao.setTipoTransacao(TransacaoTipo.SAQUE);
 		movimentacao.setValorOperacao(10.);
 		movimentacao.setConta(conta);
 
 		
 		switch (movimentacao.getTipoTransacao()) {
-	    case "saque":
+	    case SAQUE:
 	        controle.sacar(movimentacao, conta, cliente);
 	        break;
-	    case "depósito":
+	    case DEPOSITO:
 	        controle.depositar(movimentacao, cliente);
 	        break;
-	    case "pagamento":
+	    case PAGAMENTO:
 	        controle.pagamento(movimentacao, conta, cliente);
 	        break;
-	    case "pix":
+	    case PIX:
 	    	System.out.println("Tarifa extra de 5,00 aplicada pela operação!");
 	        controle.pagamentoPIX(movimentacao, conta, cliente);
 	        break;
-	    case "débito":
+	    case CARTAO_DE_DEBITO:
 	        controle.debito(movimentacao, conta);
 	        break;
 	    default:

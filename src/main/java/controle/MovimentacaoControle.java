@@ -7,12 +7,30 @@ import entidade.Cliente;
 import entidade.Conta;
 import entidade.Movimentacao;
 import servico.MovimentacaoServico;
+import servico.ContaServico;
 
 public class MovimentacaoControle {
 	
 	MovimentacaoServico servico = new MovimentacaoServico();
+	ContaServico contaServico = new ContaServico();
 		
 	public Movimentacao inserir(Movimentacao movimentacao) {
+//		switch (movimentacao.getTipoTransacao()) {
+//	    case SAQUE:
+//	        return servico.sacar(movimentacao, conta, cliente);
+//	    case DEPOSITO:
+//	        return servico.depositar(movimentacao, cliente);
+//	    case PAGAMENTO:
+//	    	return servico.pagamento(movimentacao, conta, cliente);
+//	    case PIX:
+//	    	System.out.println("Tarifa extra de 5,00 aplicada pela operação!");
+//	        return servico.pagamentoPIX(movimentacao, conta, cliente);
+//	    case CARTAO_DE_DEBITO:
+//	        return servico.debito(movimentacao, conta);
+//	    default:
+//	        System.out.println("Transação desconhecida: " + movimentacao.getTipoTransacao());
+//	        	break;
+//	}
 		return servico.inserir(movimentacao);
 	}
 	

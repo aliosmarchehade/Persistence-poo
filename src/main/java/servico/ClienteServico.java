@@ -2,7 +2,7 @@ package servico;
 
 import dao.ClienteDAO;
 import entidade.Cliente;
-import validacao.ValidacaoCPF;
+import util.ValidacaoCPF;
 
 public class ClienteServico {
 
@@ -11,7 +11,7 @@ public class ClienteServico {
 
     public Cliente inserir(Cliente cliente) {
 		if(!ValidacaoCPF.validarCPF(cliente.getCpf())) {
-			throw new IllegalArgumentException("");
+			throw new IllegalArgumentException("CPF Inválido!");
 		}
 		return dao.inserir(cliente);
 	}

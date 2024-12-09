@@ -8,19 +8,21 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import validacao.ValidacaoCPF;
+
 import dao.GenericoDAO;
 import dao.MovimentacaoDAO;
 import entidade.Cliente;
 import entidade.Conta;
 import entidade.Movimentacao;
+import entidade.TransacaoTipo;
+import util.ValidacaoCPF;
 
 public class MovimentacaoServico implements ServicoBase<Movimentacao> {
 	
 	MovimentacaoDAO dao = new MovimentacaoDAO();
 	EntityManagerFactory emf = Persistence.createEntityManagerFactory("bancoPU");
 	
-	
+		
 	public Movimentacao sacar(Movimentacao movimentacao, Conta conta, Cliente cliente) {
 		if (cliente.getCpf() == null || !ValidacaoCPF.validarCPF(cliente.getCpf())) {
 	        throw new IllegalArgumentException("CPF inválido!");
@@ -50,13 +52,26 @@ public class MovimentacaoServico implements ServicoBase<Movimentacao> {
 	}
 	
 	public Movimentacao depositar(Movimentacao movimentacao, Cliente cliente) {
-		ValidacaoCPF.validarCPF(cliente.getCpf());
+		if (cliente.getCpf() == null || !ValidacaoCPF.validarCPF(cliente.getCpf())) {
+	        throw new IllegalArgumentException("CPF inválido!");
+	    }
 		if(detectacaoDeFraude(movimentacao)) {
 			System.out.println("");
 			return null;
 		};
 
 		return inserir(movimentacao);
+	}
+	
+	public void depositarContapoupanca(Movimentacao movimentacao, double lucro) {
+		Movimentacao rendimento = new Movimentacao();
+		rendimento.setValorOperacao(lucro);
+		rendimento.setConta(movimentacao.getConta());
+		rendimento.setDataTransacao(new Date());
+		rendimento.setDescricao("Rendimento dos juros compostos da Conta Poupança");
+		rendimento.setTipoTransacao(TransacaoTipo.DEPOSITO);
+		System.out.println("Valor do rendimento: R$ "+rendimento.getValorOperacao());
+		//return dao.inserir(movimentacao);
 	}
 	
 	public Movimentacao pagamento(Movimentacao movimentacao, Conta conta, Cliente cliente) {
@@ -128,7 +143,7 @@ public class MovimentacaoServico implements ServicoBase<Movimentacao> {
 				return true;
 			}
 		}
-		private double consultarTotalSacadoHoje(Long contaId, String tipoTransacao) {
+		private double consultarTotalSacadoHoje(Long contaId, TransacaoTipo tipoTransacao) {
 		    EntityManager em = emf.createEntityManager();
 		    Double total = em.createQuery(
 		        "SELECT COALESCE(SUM(m.valorOperacao), 0) FROM Movimentacao m " +
